@@ -3,198 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Meet | Premium Private Service</title>
+    <title>Real Meet | VIP Premium service</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .animate-text { display: inline-block; animation: marquee 20s linear infinite; }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
-        .online-dot { height: 8px; width: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #22c55e; }
-        .premium-gradient { background: linear-gradient(135deg, #1a1a1a 0%, #2d3436 100%); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #0f172a; margin: 0; overflow-x: hidden; }
+
+        header { position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid #e2e8f0; transition: transform 0.4s ease; }
+        .header-hidden { transform: translateY(-100%); }
+
+        @keyframes neonPulse { 0% { color: #3b82f6; } 50% { color: #ec4899; } 100% { color: #3b82f6; } }
+        .live-loc-anim { animation: neonPulse 2s infinite; font-weight: 600; font-size: 11px; }
+
+        /* Extra Compact Notification */
+        #profile-toast { 
+            position: fixed; bottom: 85px; left: 12px; 
+            background: white; padding: 8px; border-radius: 15px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08); 
+            display: flex; align-items: center; gap: 8px; 
+            transform: translateY(250%); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 9999; border: 1px solid #f1f5f9;
+            width: 250px;
+        }
+        .toast-active { transform: translateY(0) !important; }
+        .toast-img-mini { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; }
+        .toast-user-info { font-size: 8px; color: #94a3b8; font-weight: 600; }
+        .toast-main-msg { font-size: 11px; color: #1e293b; font-weight: 800; line-height: 1.1; }
+
+        /* Verified Badge & Rating */
+        .verified-badge { position: absolute; top: 8px; right: 8px; background: #3b82f6; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 8px; border: 1.5px solid white; z-index: 10; }
+        .rating-chip { background: rgba(255, 255, 255, 0.9); padding: 2px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; color: #f59e0b; display: flex; align-items: center; gap: 2px; position: absolute; bottom: 8px; left: 8px; }
+
+        .view-profile-btn { background: #22c55e; color: white; font-weight: 700; font-size: 11px; padding: 10px 0; border-radius: 12px; width: 100%; text-align: center; display: block; margin-top: 10px; transition: 0.3s; border: none; cursor: pointer; }
+        
+        footer { background: #020617; color: #64748b; padding-top: 60px; }
+        .footer-reviews { background: #0f172a; padding: 25px 0; overflow: hidden; border-top: 2px solid #1e293b; }
+        
+        /* Slower Animation */
+        .review-track { display: inline-block; animation: slideSlow 110s linear infinite; white-space: nowrap; }
+        @keyframes slideSlow { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+        .rev-card { display: inline-block; background: #1e293b; padding: 12px 20px; margin-right: 20px; border-radius: 12px; border: 1px solid #334155; }
+
+        .tele-float { position: fixed; right: 15px; bottom: 20px; background: #229ED9; color: white; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 999; border: 2px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        #age-gate { position: fixed; inset: 0; background: #020617; z-index: 10000; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
-<body class="bg-[#f8f9fa] font-sans text-gray-900">
+<body onload="initApp()" class="pt-32">
 
-    <div class="bg-black py-1.5 overflow-hidden border-b border-pink-500/30">
-        <p class="animate-text whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.2em] text-pink-500">
-            👑 Exclusive Membership Open | 100% Verified Profiles | Secret Codes: RM11 & RM22 | Live Video Calls Available 👑
-        </p>
+    <div id="age-gate">
+        <div class="bg-white p-8 rounded-[30px] text-center max-w-xs w-full mx-4">
+            <h2 class="text-xl font-bold mb-2">Age Verification</h2>
+            <p class="text-xs text-slate-400 mb-6 font-medium">Click enter if you are 18 or older.</p>
+            <button onclick="enterSite()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl text-sm transition active:scale-95">Enter Site</button>
+        </div>
     </div>
 
-    <header class="glass sticky top-0 z-50 shadow-sm px-4 py-3">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <div class="bg-pink-600 p-1.5 rounded-lg text-white">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <h1 class="text-xl font-black tracking-tighter italic">REAL<span class="text-pink-600">MEET</span></h1>
+    <header id="main-header" class="py-4 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-2xl font-black italic tracking-tighter text-blue-600">Real<span class="text-slate-900">Meet</span></h1>
+                <p id="live-loc-text" class="live-loc-anim mt-1">Detecting local models...</p>
             </div>
-            
-            <div class="relative max-w-[150px] md:max-w-[200px]">
-                <input type="text" id="citySearch" onkeyup="searchCity()" placeholder="Find City..." 
-                class="w-full bg-gray-100 border-none rounded-full py-2 px-4 text-xs focus:ring-2 focus:ring-pink-500 transition-all outline-none">
-                <i class="fas fa-search absolute right-3 top-2.5 text-gray-400 text-[10px]"></i>
+            <div class="relative w-full md:w-80">
+                <input type="text" id="citySearch" oninput="runSearch()" placeholder="Search City (e.g. Delhi)" 
+                class="w-full bg-slate-100 border-none rounded-full px-5 py-2.5 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
             </div>
         </div>
     </header>
 
-    <div class="text-center py-8 bg-white">
-        <h2 class="text-2xl font-extrabold text-gray-800 tracking-tight">VIP Companion Directory</h2>
-        <div class="flex justify-center items-center mt-2 space-x-2">
-            <span class="h-[1px] w-8 bg-pink-300"></span>
-            <p class="text-[11px] text-pink-500 font-bold uppercase tracking-widest">Private & Confidential</p>
-            <span class="h-[1px] w-8 bg-pink-300"></span>
-        </div>
-    </div>
-
-    <main class="container mx-auto px-4 pb-20">
-        <div id="profileGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-lg font-bold text-slate-800">Genuine Profiles</h2>
+            <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-[10px] font-bold text-slate-600 uppercase" id="loc-tag">India</span>
             </div>
+        </div>
+        <div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5"></div>
     </main>
 
-    <div id="bookingPopup" class="fixed bottom-24 left-4 right-4 md:right-auto md:w-80 glass shadow-2xl rounded-2xl p-4 flex items-center space-x-4 transform transition-all duration-700 translate-y-[200%] z-[60]">
-        <div class="relative flex-shrink-0">
-            <img id="popImg" src="" class="w-14 h-14 rounded-full object-cover border-2 border-pink-500">
-            <div class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
-        </div>
-        <div class="flex-1">
-            <p id="popText" class="text-xs leading-tight text-gray-700 font-medium"></p>
-            <p class="text-[10px] text-pink-600 font-bold mt-1 uppercase tracking-tighter animate-pulse">🔥 Someone is waiting...</p>
+    <div id="profile-toast">
+        <img id="toast-img" src="" class="toast-img-mini">
+        <div class="flex-1 overflow-hidden">
+            <p id="toast-name" class="toast-user-info"></p>
+            <p id="toast-msg" class="toast-main-msg"></p>
         </div>
     </div>
 
-    <a href="https://t.me/RealMeetSupport" class="fixed bottom-6 right-6 bg-[#0088cc] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all z-50">
-        <i class="fab fa-telegram-plane text-2xl"></i>
-    </a>
-
-    <footer class="bg-gray-950 text-white pt-16 pb-8 px-4">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-16">
-                <h3 class="text-pink-500 font-bold text-xs uppercase tracking-[0.3em] mb-6">Recent Experiences</h3>
-                <div id="reviewContainer" class="h-24 relative overflow-hidden">
-                    </div>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center border-t border-white/5 pt-12">
-                <a href="#" class="hover:text-pink-500 transition">Privacy Policy</a>
-                <a href="#" class="hover:text-pink-500 transition">Terms of Use</a>
-                <a href="#" class="hover:text-pink-500 transition">Disclaimer</a>
-                <a href="#" class="hover:text-pink-500 transition">Contact Us</a>
-            </div>
-            
-            <div class="text-center">
-                <div class="inline-block px-4 py-1 border border-pink-500/20 rounded-full mb-4">
-                    <p class="text-[9px] text-pink-500/60 font-medium tracking-tighter">100% Encrypted & Anonymous Service</p>
+    <footer>
+        <div class="footer-reviews">
+            <div class="review-track" id="reviewTrack"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-10">
+            <div class="col-span-2 md:col-span-1">
+                <h1 class="text-xl font-black italic text-white mb-4">Real<span class="text-blue-500">Meet</span></h1>
+                <p class="text-xs opacity-40 leading-relaxed mb-6">Premium network for verified companions. Discretion and safety is our priority.</p>
+                <div class="flex gap-3">
+                    <a href="#" class="text-slate-500 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/Xnehhaa" class="text-slate-500 hover:text-white"><i class="fab fa-telegram-plane"></i></a>
                 </div>
-                <p class="text-[10px] text-gray-700 uppercase">© 2026 REAL MEET SERVICE | STRICTLY 18+</p>
+            </div>
+            <div>
+                <span class="text-white text-[11px] font-bold uppercase mb-4 block">Information</span>
+                <ul class="text-[11px] font-medium space-y-3">
+                    <li><a href="#">Refund Policy</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+            </div>
+            <div>
+                <span class="text-white text-[11px] font-bold uppercase mb-4 block">Company</span>
+                <ul class="text-[11px] font-medium space-y-3">
+                    <li>Verified Models</li>
+                    <li>Independent VIP</li>
+                    <li>Verified Agency</li>
+                </ul>
+            </div>
+            <div class="bg-blue-600/10 p-4 rounded-xl border border-blue-500/20">
+                <p class="text-[10px] text-blue-400 font-bold mb-1"><i class="fas fa-shield-alt mr-1"></i> Private & Secure</p>
+                <p class="text-[9px] opacity-40 leading-tight">Your data is encrypted.</p>
             </div>
         </div>
     </footer>
 
+    <a href="https://t.me/Xnehhaa" class="tele-float"><i class="fab fa-telegram-plane text-xl"></i></a>
+
     <script>
-        const cities = ["Delhi", "Mumbai", "Bangalore", "Pune", "Hyderabad", "Kolkata", "Chennai", "Ahmedabad", "Jaipur", "Lucknow", "Chandigarh", "Indore", "Gurgaon", "Noida", "Surat", "Bhopal", "Patna", "Kanpur", "Nagpur", "Ludhiana"];
-        const names = ["Ishita", "Ananya", "Sana", "Kavya", "Priya", "Mehak", "Riya", "Zoya", "Myra", "Sneha", "Kaira", "Simran", "Tanya", "Nisha", "Aditi"];
+        const firstNames = ["Sneha", "Zoya", "Ananya", "Mehak", "Sana", "Ishita", "Priya", "Riya", "Kavya", "Tanya", "Simran", "Nisha", "Pooja", "Kiara", "Muskan", "Aliza", "Ayat", "Jiya", "Aysha", "Sanya"];
+        const lastNames = ["Sharma", "Khan", "Malhotra", "Sheikh", "Verma", "Ahmed", "Kapoor", "Mirza", "Gupta", "Ansari"];
+        const clientNames = ["Rahul", "Amit", "Sumit", "Zaid", "Arjun", "Vikram", "Saahil", "Rohan", "Deepak", "Yash", "Kabir", "Aditya", "Manish", "Faisal", "Varun", "Piyush", "Akash", "Karan", "Imran", "Sunny"];
         
         const naughtyMsgs = [
-            "is looking for a private date in",
-            "just accepted a video call from",
-            "is waiting for a secret meet in",
-            "just sent a private photo to a client in",
-            "is ready to meet right now in",
-            "wants to have a late night chat in"
+            "Available for real meet tonight 💋", "Ready for video call & sexy talk 💋", "Private meeting available 💋🔥", 
+            "Want to talk on call? 📞", "Secret meeting at your hotel 🏨", "Available for night stay 🏠",
+            "Wants to connect with you 💞", "Online now for video call 📱", "Available for sexy talk 💋",
+            "Let's meet in person tonight 🔥", "Direct meeting, no advance ❌"
         ];
 
-        const fakeReviews = [
-            {n: "Vikram Rathore", c: "Delhi", r: "Service bohot fast hai, profile ekdum real thi. RM11 code worked!"},
-            {n: "Sameer Khanna", c: "Mumbai", r: "Best private service in Mumbai. Totally anonymous and safe."},
-            {n: "Rahul Verma", c: "Bangalore", r: "Payment ke 5 min baad hi connect ho gaya. Highly recommended."},
-            {n: "Arjun Singh", c: "Pune", r: "Premium profiles aur genuine behaviour. Loved the experience."},
-            {n: "Deepak Mehra", c: "Gurgaon", r: "Best call rates and high quality profiles. Totally satisfied."}
+        const clientFeedbacks = [
+            "Genuine profile and safe meeting.", "Best service in the city, highly recommend.", "Very professional and discreet.", "Found exactly what I was looking for.", "Direct meeting without any hassle.", "Amazing experience, will book again.", "Verified profiles and polite behavior.", "100% genuine, no fake photos.", "Safe and comfortable environment.", "The best agency for real meets."
         ];
 
-        function init() {
-            const grid = document.getElementById('profileGrid');
-            let profiles = [];
-            for (let i = 1; i <= 80; i++) {
-                profiles.push({
-                    id: i,
-                    name: names[Math.floor(Math.random() * names.length)],
-                    city: cities[Math.floor((i-1) / 4)],
-                    img: `pic${i}.jpg`,
-                    // Random rating between 4.2 and 4.9
-                    rating: (Math.random() * (4.9 - 4.2) + 4.2).toFixed(1)
-                });
+        function enterSite() { 
+            document.getElementById('age-gate').style.display = 'none'; 
+            localStorage.setItem('gatePassed', 'true');
+        }
+
+        async function updateLocationDisplay(city) {
+            if(city) {
+                document.getElementById('live-loc-text').innerText = `Available in ${city} (Live Now)`;
+                document.getElementById('loc-tag').innerText = city;
             }
-            profiles.sort(() => Math.random() - 0.5);
+        }
 
-            profiles.forEach(p => {
+        async function initApp() {
+            if(localStorage.getItem('gatePassed')) document.getElementById('age-gate').style.display = 'none';
+
+            let detectedCity = 'India';
+
+            // Real-time Location Logic
+            try {
+                const ipRes = await fetch('https://ipapi.co/json/');
+                const ipData = await ipRes.json();
+                detectedCity = ipData.city || 'India';
+                updateLocationDisplay(detectedCity);
+            } catch(e) {
+                updateLocationDisplay('India');
+            }
+
+            // Creating profiles based on detected city or search
+            window.generateProfiles = function(city) {
+                let profiles = [];
+                for(let i=1; i<=85; i++) {
+                    profiles.push({
+                        id: i,
+                        fullName: firstNames[Math.floor(Math.random()*firstNames.length)] + " " + lastNames[Math.floor(Math.random()*lastNames.length)],
+                        city: city, // Set city to searched or detected city
+                        img: `pic${(i%80)+1}.jpg`,
+                        age: Math.floor(Math.random() * (25 - 20 + 1)) + 20,
+                        rating: (Math.random() * (5.0 - 4.5) + 4.5).toFixed(1)
+                    });
+                }
+                window.allProfiles = profiles;
+                renderProfiles(window.allProfiles);
+            }
+
+            // Initial load with detected city
+            window.generateProfiles(detectedCity);
+
+            let revHtml = "";
+            for(let i=0; i<30; i++) {
+                revHtml += `<div class="rev-card"><p class="text-[10px] text-white font-bold">${clientNames[Math.floor(Math.random()*clientNames.length)]} (${detectedCity})</p><p class="text-[10px] text-slate-500 mt-1">${clientFeedbacks[Math.floor(Math.random()*clientFeedbacks.length)]}</p></div>`;
+            }
+            document.getElementById('reviewTrack').innerHTML = revHtml + revHtml;
+
+            triggerRandomPopup();
+        }
+
+        function renderProfiles(data) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = "";
+            data.forEach(p => {
                 grid.innerHTML += `
-                    <div class="bg-white rounded-2xl p-1.5 shadow-sm hover:shadow-xl transition-all duration-300 profile-card border border-gray-50" data-city="${p.city.toLowerCase()}">
-                        <div class="relative overflow-hidden rounded-xl">
-                            <img src="${p.img}" class="w-full h-44 object-cover">
-                            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-[8px] text-white px-2 py-0.5 rounded-full font-bold">
-                                <span class="online-dot mr-1"></span> LIVE
-                            </div>
+                    <div class="profile-card bg-white p-2 rounded-2xl border border-slate-100 shadow-sm" data-city="${p.city.toLowerCase()}">
+                        <div class="relative h-44 overflow-hidden rounded-xl bg-slate-100">
+                            <img src="${p.img}" class="w-full h-full object-cover">
+                            <div class="verified-badge"><i class="fas fa-check"></i></div>
+                            <div class="rating-chip"><i class="fas fa-star"></i> ${p.rating}</div>
                         </div>
-                        <div class="mt-2 px-1 pb-2 text-center">
-                            <h3 class="font-bold text-xs text-gray-800">${p.name} <i class="fas fa-check-circle text-blue-500 text-[9px]"></i></h3>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">${p.city}</p>
-                            <div class="flex justify-center text-[9px] text-yellow-500 my-1.5">
-                                <i class="fas fa-star"></i> <span class="text-gray-900 font-bold ml-1">${p.rating}</span>
-                            </div>
-                            <button onclick="window.location.href='profile.html?id=${p.id}&name=${p.name}&city=${p.city}'" class="w-full bg-pink-600 text-white text-[10px] py-2 rounded-lg font-black uppercase hover:bg-black transition">Meet Now</button>
+                        <div class="p-3 text-center">
+                            <h3 class="text-[12px] font-bold text-slate-800">${p.fullName}, ${p.age}</h3>
+                            <p class="text-[9px] text-blue-500 font-semibold mt-1">${p.city}</p>
+                            <button onclick="goToProfile('${p.fullName}', '${p.city}', '${p.img}', '${p.age}', '${p.rating}')" class="view-profile-btn">View Profile</button>
                         </div>
-                    </div>
-                `;
-            });
-            renderReviews();
-        }
-
-        function renderReviews() {
-            const container = document.getElementById('reviewContainer');
-            fakeReviews.forEach((rev, idx) => {
-                container.innerHTML += `
-                    <div class="review-item absolute inset-0 flex flex-col items-center transition-opacity duration-1000 opacity-0" id="rev-${idx}">
-                        <p class="text-sm italic text-gray-400 max-w-sm">"${rev.r}"</p>
-                        <p class="text-pink-500 font-bold text-[10px] mt-2 uppercase tracking-widest">— ${rev.n}, ${rev.c}</p>
-                    </div>
-                `;
-            });
-            cycleReviews();
-        }
-
-        let currentRev = 0;
-        function cycleReviews() {
-            document.querySelectorAll('.review-item').forEach(el => el.style.opacity = 0);
-            document.getElementById(`rev-${currentRev}`).style.opacity = 1;
-            currentRev = (currentRev + 1) % fakeReviews.length;
-            setTimeout(cycleReviews, 5000);
-        }
-
-        function searchCity() {
-            let val = document.getElementById('citySearch').value.toLowerCase();
-            document.querySelectorAll('.profile-card').forEach(card => {
-                card.style.display = card.dataset.city.includes(val) ? "block" : "none";
+                    </div>`;
             });
         }
 
-        // Naughty Booking Popups
-        setInterval(() => {
-            const pop = document.getElementById('bookingPopup');
-            const randomImg = Math.floor(Math.random() * 80) + 1;
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            const randomCity = cities[Math.floor(Math.random() * cities.length)];
-            const randomMsg = naughtyMsgs[Math.floor(Math.random() * naughtyMsgs.length)];
+        function goToProfile(name, city, img, age, rating) {
+            const selectedProfile = { name, city, img, age, rating };
+            localStorage.setItem('selectedProfile', JSON.stringify(selectedProfile));
+            window.location.href = 'profile.html';
+        }
 
-            document.getElementById('popImg').src = `pic${randomImg}.jpg`;
-            document.getElementById('popText').innerHTML = `<b>${randomName}</b> ${randomMsg} <b>${randomCity}</b>`;
-            
-            pop.classList.remove('translate-y-[200%]');
-            setTimeout(() => pop.classList.add('translate-y-[200%]'), 5000);
-        }, 8000);
+        function runSearch() {
+            const input = document.getElementById('citySearch').value.trim();
+            if (input.length > 2) {
+                // Generate new profiles for the searched city
+                window.generateProfiles(input);
+                updateLocationDisplay(input);
+            }
+        }
 
-        window.onload = init;
+        function triggerRandomPopup() {
+            const randomDelay = Math.floor(Math.random() * (15000 - 7000 + 1)) + 7000;
+            setTimeout(() => {
+                showPopup();
+                triggerRandomPopup();
+            }, randomDelay);
+        }
+
+        function showPopup() {
+            const toast = document.getElementById('profile-toast');
+            if(window.allProfiles && window.allProfiles.length > 0) {
+                const p = window.allProfiles[Math.floor(Math.random()*window.allProfiles.length)];
+                document.getElementById('toast-img').src = p.img;
+                document.getElementById('toast-name').innerText = `${p.fullName.split(' ')[0]} from ${p.city}`;
+                document.getElementById('toast-msg').innerText = naughtyMsgs[Math.floor(Math.random()*naughtyMsgs.length)];
+                toast.classList.add('toast-active');
+                setTimeout(() => toast.classList.remove('toast-active'), 4500);
+            }
+        }
+
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.pageYOffset > lastScroll && window.pageYOffset > 100) header.classList.add('header-hidden');
+            else header.classList.remove('header-hidden');
+            lastScroll = window.pageYOffset;
+        });
     </script>
 </body>
 </html>
